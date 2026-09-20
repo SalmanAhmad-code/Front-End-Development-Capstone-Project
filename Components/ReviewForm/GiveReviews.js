@@ -7,6 +7,7 @@ import './GiveReviews.css';
 function GiveReviews() {
   const [showForm, setShowForm] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', review: '', rating: 0 });
 
   const handleButtonClick = () => {
@@ -22,15 +23,14 @@ function GiveReviews() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setFormData({ name: '', review: '', rating: 0 });
-
     if (formData.name && formData.review && formData.rating > 0) {
       setShowWarning(false);
+      setReviewSubmitted(true);
+      setFormData({ name: '', review: '', rating: 0 });
+      setShowForm(false);
     } else {
       setShowWarning(true);
     }
-
-    setShowForm(false)
   };
 
   const handleStarClick = (starIndex) => {
@@ -53,7 +53,13 @@ function GiveReviews() {
 
   return (
     <div>
-      <Button variant="primary" /*disabled size='sm'*/ onClick={handleButtonClick}>Click Here</Button>
+      {reviewSubmitted ? (
+        <Button variant="success" size="sm" disabled>
+          Review Submitted
+        </Button>
+      ) : (
+        <Button variant="primary" onClick={handleButtonClick}>Click Here</Button>
+      )}
 
       <Popup
         style={{ backgroundColor: "#FFFFFF" }}
